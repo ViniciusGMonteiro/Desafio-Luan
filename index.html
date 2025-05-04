@@ -42,7 +42,7 @@
     
     <script src="https://unpkg.com/@smash-sdk/uploader/dist/SmashUploader.browser.js">
         document.addEventListener('DOMContentLoaded', function() {
-            // Elements
+          
             const smashUploader = new SmashUploader({
     apiKey: "<eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIyN2YyM2VhLTFiZjYtNDQzMy04MDY2LTk4YzU1N2Q4YWE4NS1ldSIsInVzZXJuYW1lIjoiYjUzNjAyODAtOWQyMi00ZTk0LTkwYmMtZThiM2ZkNTE1NGFiIiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxODEuMTkxLjE2OS4yNTUiLCJzY29wZSI6Ik5vbmUiLCJhY2NvdW50IjoiOTExOWYyYmYtMTc1MS00ZWVkLWE5OTktZTMyNzhmMTc4NGFmLWVhIiwiaWF0IjoxNzQ2MjUwMzQ1LCJleHAiOjQ5MDIwMTAzNDV9.ylmc0xmi1ESSJRIrPkKArlbQGot5lZYQcM4jf31uUSo>"
 });
@@ -60,28 +60,26 @@
     file: file,
     recipients: [email],
     onProgress: (progress) => {
-        // Atualização da barra de progresso
+       
     }
 };
 
 smashUploader.upload(uploadParams)
     .then(response => {
-        // Tratamento de sucesso
+     
     })
     .catch(error => {
-        // Tratamento de erro
+       
     });
-            // Constants
+        
             const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
             
-            // Format file size
             function formatFileSize(bytes) {
                 if (bytes < 1024) return bytes + ' B';
                 else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
                 else return (bytes / 1048576).toFixed(1) + ' MB';
             }
             
-            // Show error message
             function showError(message) {
                 errorText.textContent = message;
                 errorMessage.classList.remove('hidden');
@@ -90,24 +88,21 @@ smashUploader.upload(uploadParams)
                 }, 5000);
             }
             
-            // Show success message
             function showSuccess(message) {
                 successText.textContent = message;
                 successMessage.classList.remove('hidden');
             }
             
-            // Handle file selection
             fileInput.addEventListener('change', function() {
                 if (this.files && this.files.length > 0) {
                     const file = this.files[0];
                     
-                    // Check file size
                     if (file.size > MAX_FILE_SIZE) {
                         showError('O arquivo excede o limite de 5MB. Por favor, selecione um arquivo menor.');
                         fileInput.value = '';
                         fileInfo.classList.add('hidden');
                     } else {
-                        // Display file info
+                       
                         fileInfo.textContent = `Arquivo selecionado: ${file.name} (${formatFileSize(file.size)})`;
                         fileInfo.classList.remove('hidden');
                     }
@@ -116,14 +111,12 @@ smashUploader.upload(uploadParams)
                 }
             });
             
-            // Handle form submission
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 const email = emailInput.value;
                 const file = fileInput.files[0];
                 
-                // Validate file
                 if (!file) {
                     showError('Por favor, selecione um arquivo para enviar.');
                     return;
@@ -134,17 +127,13 @@ smashUploader.upload(uploadParams)
                     return;
                 }
                 
-                // Prepare UI for upload
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = 'Enviando...';
                 errorMessage.classList.add('hidden');
                 successMessage.classList.add('hidden');
                 
-                // Simulate successful upload (for demonstration)
                 setTimeout(() => {
                     showSuccess(`Arquivo enviado com sucesso para ${email}!`);
-                    
-                    // Reset form
                     form.reset();
                     fileInfo.classList.add('hidden');
                     submitBtn.innerHTML = '<i class="ph ph-paper-plane-right"></i>Enviar Arquivo';
