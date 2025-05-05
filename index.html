@@ -4,144 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload de Arquivos (Simples)</title>
-    <link rel="style.css" href="https://unpkg.com/@phosphor-icons/web/src/regular/style.css" />
     <link rel="stylesheet" href="style.css">
+    <!-- Carregando o script do SmashUploader -->
+    <script src="https://unpkg.com/@smash-sdk/uploader/dist/SmashUploader.browser.js"></script>
+    <!-- Carregando os ícones do Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Upload de Arquivos</h1>
-        
-        <form id="uploadForm">
-            <div class="form-group">
-                <label for="email">E-mail do destinatário</label>
-                <input type="email" id="email" name="email" placeholder="Digite o e-mail do destinatário" required>
-            </div>
+        <div class="upload-card">
+            <h1 class="title">Upload de Arquivos</h1>
             
-            <div class="form-group">
-                <label for="fileInput">Arquivo (máx. 5MB)</label>
-                <input type="file" id="fileInput" name="file" required>
-                <div id="fileInfo" class="file-info hidden"></div>
-            </div>
-            
-            <button type="submit" id="submitBtn" class="btn btn-primary">
-                <i class="ph ph-paper-plane-right"></i>
-                Enviar Arquivo
-            </button>
-            
-            <div id="errorMessage" class="message message-error hidden">
-                <i class="ph ph-warning"></i>
-                <span id="errorText"></span>
-            </div>
-            
-            <div id="successMessage" class="message message-success hidden">
-                <i class="ph ph-check-circle"></i>
-                <span id="successText"></span>
-            </div>
-        </form>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="email">E-mail do destinatário</label>
+                    <input type="email" id="email" name="email" placeholder="Digite o e-mail do destinatário" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fileInput">Arquivo (máx. 5MB)</label>
+                    <input type="file" id="fileInput" name="file" required>
+                    <div id="fileInfo" class="file-info hidden"></div>
+                </div>
+                
+                <div id="progressContainer" class="progress-container hidden">
+                    <div class="progress-bar">
+                        <div id="progressBar" class="progress-fill"></div>
+                    </div>
+                    <p id="progressText" class="progress-text">0% concluído</p>
+                </div>
+                
+                <button type="submit" id="submitBtn" class="btn btn-primary">
+                    <i data-lucide="paper-plane"></i>
+                    Enviar Arquivo
+                </button>
+                
+                <div id="errorMessage" class="message message-error hidden">
+                    <i data-lucide="alert-circle"></i>
+                    <span id="errorText"></span>
+                </div>
+                
+                <div id="successMessage" class="message message-success hidden">
+                    <i data-lucide="check-circle"></i>
+                    <span id="successText"></span>
+                </div>
+            </form>
+        </div>
     </div>
     
-    <script src="https://unpkg.com/@smash-sdk/uploader/dist/SmashUploader.browser.js">
-        document.addEventListener('DOMContentLoaded', function() {
-          
-            const smashUploader = new SmashUploader({
-    apiKey: "<eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIyN2YyM2VhLTFiZjYtNDQzMy04MDY2LTk4YzU1N2Q4YWE4NS1ldSIsInVzZXJuYW1lIjoiYjUzNjAyODAtOWQyMi00ZTk0LTkwYmMtZThiM2ZkNTE1NGFiIiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxODEuMTkxLjE2OS4yNTUiLCJzY29wZSI6Ik5vbmUiLCJhY2NvdW50IjoiOTExOWYyYmYtMTc1MS00ZWVkLWE5OTktZTMyNzhmMTc4NGFmLWVhIiwiaWF0IjoxNzQ2MjUwMzQ1LCJleHAiOjQ5MDIwMTAzNDV9.ylmc0xmi1ESSJRIrPkKArlbQGot5lZYQcM4jf31uUSo>"
-});
-            
-            const form = document.getElementById('uploadForm');
-            const emailInput = document.getElementById('email');
-            const fileInput = document.getElementById('fileInput');
-            const fileInfo = document.getElementById('fileInfo');
-            const submitBtn = document.getElementById('submitBtn');
-            const errorMessage = document.getElementById('errorMessage');
-            const errorText = document.getElementById('errorText');
-            const successMessage = document.getElementById('successMessage');
-            const successText = document.getElementById('successText');
-            const uploadParams = {
-    file: file,
-    recipients: [email],
-    onProgress: (progress) => {
-       
-    }
-};
-
-smashUploader.upload(uploadParams)
-    .then(response => {
-     
-    })
-    .catch(error => {
-       
-    });
-        
-            const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
-            
-            function formatFileSize(bytes) {
-                if (bytes < 1024) return bytes + ' B';
-                else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-                else return (bytes / 1048576).toFixed(1) + ' MB';
-            }
-            
-            function showError(message) {
-                errorText.textContent = message;
-                errorMessage.classList.remove('hidden');
-                setTimeout(() => {
-                    errorMessage.classList.add('hidden');
-                }, 5000);
-            }
-            
-            function showSuccess(message) {
-                successText.textContent = message;
-                successMessage.classList.remove('hidden');
-            }
-            
-            fileInput.addEventListener('change', function() {
-                if (this.files && this.files.length > 0) {
-                    const file = this.files[0];
-                    
-                    if (file.size > MAX_FILE_SIZE) {
-                        showError('O arquivo excede o limite de 5MB. Por favor, selecione um arquivo menor.');
-                        fileInput.value = '';
-                        fileInfo.classList.add('hidden');
-                    } else {
-                       
-                        fileInfo.textContent = `Arquivo selecionado: ${file.name} (${formatFileSize(file.size)})`;
-                        fileInfo.classList.remove('hidden');
-                    }
-                } else {
-                    fileInfo.classList.add('hidden');
-                }
-            });
-            
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const email = emailInput.value;
-                const file = fileInput.files[0];
-                
-                if (!file) {
-                    showError('Por favor, selecione um arquivo para enviar.');
-                    return;
-                }
-                
-                if (file.size > MAX_FILE_SIZE) {
-                    showError('O arquivo excede o limite de 5MB. Por favor, selecione um arquivo menor.');
-                    return;
-                }
-                
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = 'Enviando...';
-                errorMessage.classList.add('hidden');
-                successMessage.classList.add('hidden');
-                
-                setTimeout(() => {
-                    showSuccess(`Arquivo enviado com sucesso para ${email}!`);
-                    form.reset();
-                    fileInfo.classList.add('hidden');
-                    submitBtn.innerHTML = '<i class="ph ph-paper-plane-right"></i>Enviar Arquivo';
-                    submitBtn.disabled = false;
-                }, 2000);
-                
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
